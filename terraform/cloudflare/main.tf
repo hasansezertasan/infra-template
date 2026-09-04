@@ -9,14 +9,14 @@ locals {
 # zone. Add managed resources in separate, purpose-named files after setup.
 data "cloudflare_zone" "configured" {
   zone_id = local.infra_copilot_config.cloudflare_zone_id
-}
 
-check "cloudflare_zone_matches_config" {
-  assert {
-    condition = (
-      data.cloudflare_zone.configured.name == local.infra_copilot_config.apex_domain &&
-      data.cloudflare_zone.configured.account.id == local.infra_copilot_config.cloudflare_account_id
-    )
-    error_message = "The configured Cloudflare zone, domain, and account do not match."
+  lifecycle {
+    postcondition {
+      condition = (
+        self.name == local.infra_copilot_config.apex_domain &&
+        self.account.id == local.infra_copilot_config.cloudflare_account_id
+      )
+      error_message = "The configured Cloudflare zone, domain, and account do not match."
+    }
   }
 }

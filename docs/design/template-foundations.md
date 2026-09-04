@@ -63,7 +63,8 @@ The repository starts with two independent roots:
 
 Each root owns its provider declaration, input variables, provider lockfile, plan, and
 state. HCP Terraform uses the matching directory as its VCS working directory and watches
-only that directory. Remote execution and manual apply confirmation are required.
+that directory plus the shared `.infra-copilot/config.md`. Remote execution and manual
+apply confirmation are required.
 
 An additional provider receives a new root and workspace only when the deployment
 actually uses it. A provider is not pre-created merely because it is a likely future
@@ -87,7 +88,8 @@ template ships only `.infra-copilot/config.md.example`; an active config is crea
 setup so placeholder values cannot be mistaken for a real environment.
 
 Terraform's `cloud` block requires a literal organization name. After the active config
-is created or changed, `scripts/sync-config.sh` copies its `hcp_org` value into both roots.
+is created or changed, a human reviews and runs `scripts/sync-config.sh`, which copies its
+`hcp_org` value into both roots. The config and synchronized roots are committed together.
 The template validator then ensures those literals and the canonical config remain in
 sync.
 

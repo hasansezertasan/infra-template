@@ -32,6 +32,10 @@ done
 config_path=.infra-copilot/config.md.example
 if [[ -f .infra-copilot/config.md ]]; then
   config_path=.infra-copilot/config.md
+  if grep -Fq 'replace-with-' "$config_path"; then
+    printf '%s contains unresolved template placeholders\n' "$config_path" >&2
+    exit 1
+  fi
 fi
 
 config_keys=(
@@ -91,8 +95,12 @@ for tool in gh jq; do
   fi
 done
 
-for secret_pattern in '*.pem' '*.key' '*.tfvars' '*.tfstate' '*.tfplan' '.env'; do
-  if git ls-files -- "$secret_pattern" "**/$secret_pattern" | grep -q .; then
+for secret_pattern in \
+  '*.pem' '*.key' '*.tfvars' '*.tfvars.json' '*.tfstate' '*.tfstate.*' \
+  '*.tfplan' '*.tfplan.*' '.env' '.env.*'; do
+  tracked_matches=$(git ls-files -- "$secret_pattern" "**/$secret_pattern" \
+    | grep -Ev '(^|/)\.env\.example$' || true)
+  if [[ -n "$tracked_matches" ]]; then
     printf 'tracked secret or local-state file matches %s\n' "$secret_pattern" >&2
     exit 1
   fi

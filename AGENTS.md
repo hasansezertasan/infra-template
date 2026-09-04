@@ -8,14 +8,13 @@ This repository is the consuming infrastructure repository for `infra-copilot`.
 - Read `.infra-copilot/config.md` before acting. If it is absent, use infra-copilot's
   config handoff and `.infra-copilot/config.md.example` to create it; never treat the
   example placeholders as deployment values.
-- Immediately after creating or changing the config, run `./scripts/sync-config.sh`.
-  The script keeps the literal HCP organization in both Terraform `cloud` blocks aligned
-  with the canonical `hcp_org` value.
+- After creating or changing the config, review `./scripts/sync-config.sh` in full before
+  trusting it, then run it yourself. The script keeps the literal HCP organization in
+  both Terraform `cloud` blocks aligned with the canonical `hcp_org` value. Commit the
+  config and synchronized roots together before continuing setup.
 - Record durable architecture, authentication, state, and safety choices in
   `.infra-copilot/decisions.md`.
 - Keep Cloudflare and GitHub in separate Terraform roots and HCP workspaces.
-- Execute infra-copilot manifest command blocks with Bash; its checks use Bash-style
-  word splitting and shell syntax.
 - Run `mise exec -- make check` before proposing a change.
 
 ## Safety

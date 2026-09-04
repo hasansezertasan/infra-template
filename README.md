@@ -9,8 +9,8 @@ maintained with [infra-copilot](https://github.com/hasansezertasan/infra-copilot
 2. Install infra-copilot using its current installation instructions.
 3. Ask your agent to use infra-copilot to set up the repository. It will stop for the
    public identifiers needed to create `.infra-copilot/config.md`.
-4. After the config is filled, run `./scripts/sync-config.sh` to bind both Terraform
-   roots to the configured HCP organization.
+4. After the config is filled, review `./scripts/sync-config.sh`, run it to bind both
+   Terraform roots to the configured HCP organization, and commit those changes together.
 
 Do not commit credentials. Public deployment identifiers belong in
 `.infra-copilot/config.md`; API tokens and GitHub App credentials belong only in the

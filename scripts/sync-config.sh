@@ -25,12 +25,15 @@ paths=(
   "$root/terraform/github/versions.tf"
 )
 
+# Validate the complete target set before modifying either root.
 for path in "${paths[@]}"; do
   if [[ $(grep -Ec '^[[:space:]]+organization[[:space:]]*=' "$path") -ne 1 ]]; then
     printf '%s must contain exactly one cloud organization assignment\n' "$path" >&2
     exit 1
   fi
+done
 
+for path in "${paths[@]}"; do
   temporary=$(mktemp "${path}.tmp.XXXXXX")
   trap 'rm -f -- "$temporary"' EXIT
   awk -v organization="$hcp_org" '
