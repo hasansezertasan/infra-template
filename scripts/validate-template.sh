@@ -106,9 +106,16 @@ for secret_pattern in \
   fi
 done
 
-identity_files=$(git ls-files --cached --others --exclude-standard \
-  | grep -v '^.infra-copilot/config.md$' || true)
-if [[ -n "$identity_files" ]] && printf '%s\n' "$identity_files" | xargs grep -En '(^|[^[:xdigit:]])[[:xdigit:]]{32}([^[:xdigit:]]|$)' -- 2>/dev/null; then
+identity_found=false
+while IFS= read -r -d '' path; do
+  [[ "$path" == .infra-copilot/config.md ]] && continue
+  if grep -Eq '(^|[^[:xdigit:]])[[:xdigit:]]{32}([^[:xdigit:]]|$)' -- "$path" 2>/dev/null; then
+    identity_found=true
+    break
+  fi
+done < <(git ls-files -z --cached --others --exclude-standard)
+
+if [[ "$identity_found" == true ]]; then
   printf 'deployment-shaped 32-character identifier found outside the canonical config\n' >&2
   exit 1
 fi

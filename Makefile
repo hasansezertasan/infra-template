@@ -9,7 +9,7 @@ fmt:
 
 validate:
 	@set -e; for directory in $(TERRAFORM_DIRS); do \
-		terraform -chdir=$$directory init -backend=false -input=false; \
+		terraform -chdir=$$directory init -backend=false -input=false -lockfile=readonly; \
 		terraform -chdir=$$directory validate; \
 	done
 
