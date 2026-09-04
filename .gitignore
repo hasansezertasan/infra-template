@@ -1,0 +1,33 @@
+# Terraform working directories and local state
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfplan.*
+crash.log
+crash.*.log
+
+# Local Terraform inputs and overrides
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform CLI credentials
+.terraformrc
+terraform.rc
+
+# Secrets and private keys
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/
+*.swp
